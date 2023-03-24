@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { useAppSelector } from '../../redux/hooks';
@@ -9,9 +8,8 @@ import { axiosReq } from '../../utils/axiosReq';
 import AddField from './AddField';
 import ListItem from './ListItem';
 
-const SList = styled.ul`
-  ${tw`flex flex-col list-none`}
-  border: 1px solid blue;
+const SList = styled.div`
+  ${tw`flex flex-col items-start`}
 `;
 
 type Props = {
@@ -41,7 +39,7 @@ function List() {
 
   return (
     <>
-      <SList>
+      <SList role='list'>
         {items.map((e, i) => <ListItem key={i} task={e} />)}
       </SList>
       <AddField />
