@@ -8,7 +8,7 @@ import When from './When';
 
 const SItem = styled.div`
   ${tw`flex space-x-3 px-10 bg-gray-100 bg-gradient-to-b m-2 rounded-2xl py-3`}
-  min-width: 30%
+  min-width: 30%;
 `
 
 const STitle = styled.h5`
