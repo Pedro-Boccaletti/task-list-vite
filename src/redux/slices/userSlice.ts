@@ -19,7 +19,7 @@ const userSlice = createSlice({
       state.user = action.payload;
     },
     resetState: (state) => {
-      state = initialState;
+      state.user = { ...initialState.user };
     }
   }
 })
