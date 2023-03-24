@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 type InputProps<T> = {
-  change: [T, Dispatch<SetStateAction<T>>]
   type?: 'text' | 'number' | 'email' | 'password'
   name: string
   className?: string
+  forwardRef: React.RefObject<HTMLInputElement>
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
 
@@ -18,17 +19,14 @@ const SLabel = styled.label`
   }
 `;
 
-function Input<T>({ name, type, change, className }:InputProps<T>) {
+function Input<T>({ name, type, className, forwardRef, onChange }:InputProps<T>) {
   return (
     <SLabel className={className}>
       {name}
       <input
         type={type || 'text'}
-        onChange={({ target }) => {
-          change[1](target.value as T)
-        }}
-        value={change[0] as string}
-        
+        ref={forwardRef}
+        onChange={onChange}
       />
     </SLabel>
   );

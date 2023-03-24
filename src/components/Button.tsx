@@ -7,6 +7,7 @@ type Props = {
   click?: () => void
   type?: 'submit' | 'button'
   className?: string
+  disabled?: boolean
 }
 
 
@@ -17,14 +18,19 @@ const SButton = styled.button`
   &:hover {
     ${tw`bg-black text-white`}
   }
+
+  &:disabled {
+    ${tw` bg-gray-400`}
+  }
 `;
 
-function Button({ name, className, type, click }:Props) {
+function Button({ name, className, type, click, disabled }:Props) {
   return (
     <SButton
       className={className}
       type={type || 'submit'}
       onClick={ click }
+      disabled={disabled}
     >
       {name}
     </SButton>
