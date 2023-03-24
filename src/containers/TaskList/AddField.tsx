@@ -11,7 +11,7 @@ const SAddField = styled.fieldset`
   ${tw`flex p-2 gap-2`}
 `
 
-const AddInput = styled(Input<string>)`
+const AddInput = styled(Input)`
   height: 4rem;
 `
 

@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
-type InputProps<T> = {
+type InputProps = {
   type?: 'text' | 'number' | 'email' | 'password'
   name: string
   className?: string
@@ -19,7 +19,7 @@ const SLabel = styled.label`
   }
 `;
 
-function Input<T>({ name, type, className, forwardRef, onChange }:InputProps<T>) {
+function Input({ name, type, className, forwardRef, onChange }:InputProps) {
   return (
     <SLabel className={className}>
       {name}
