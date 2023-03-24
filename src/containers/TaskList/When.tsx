@@ -7,7 +7,16 @@ type Props = {
 }
 
 const DateContainer = styled.div`
-  ${tw`inline-flex justify-center rounded-3xl px-3 py-1 bg-gray-200`}
+  ${tw`inline-flex w-fit ml-2 justify-center rounded-3xl px-3 py-1 bg-gray-200`}
+  ${tw`
+    text-xs
+    text-black
+    font-light
+    transition
+    duration-500
+    ease-in-out
+    hover:text-gray-700
+  `}
 `
 
 const getMonthString = (date: Date): [string, string] => {
@@ -22,7 +31,7 @@ const getWeekDay = (date: Date): string => {
 }
 
 function When({ date }: Props) {
-  if (!date) return
+  if (!date) return null
   const day = date.toLocaleDateString(undefined, { day: '2-digit' })
   const month = getMonthString(date)
   const year = date.getFullYear()
