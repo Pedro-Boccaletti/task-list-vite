@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
 import Button from '../../components/Button'
@@ -7,6 +7,7 @@ import { axiosReq } from '../../utils/axiosReq'
 import { setUser } from '../../redux/slices/userSlice'
 import { User } from '../../typings/User'
 import { useAppDispatch } from '../../redux/hooks'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {}
 
@@ -24,21 +25,23 @@ const SForm = styled.form`
 `
 
 function LoginForm({}: Props) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
 
   return (
     <SForm
       onSubmit={async (e) => {
         e.preventDefault();
-        
+        if (!emailRef.current || !passwordRef.current) return;
         try {
           const {data} = await axiosReq().post('/login', {
-             email,
-             password,
+             email: emailRef.current.value,
+             password: passwordRef.current.value,
           })
           dispatch(setUser(data as User));
+          navigate('/tasks');
           
         } catch (error) {
           console.log(error);
@@ -48,13 +51,13 @@ function LoginForm({}: Props) {
     >
       <FormInput
         name='Email'
-        change={[email, setEmail]}
         type='email'
+        forwardRef={emailRef}
       />
       <FormInput
         name='Senha'
-        change={[password, setPassword]}
         type='password'
+        forwardRef={passwordRef}
       />
       <FormButton name='Login'/>
     </SForm>
