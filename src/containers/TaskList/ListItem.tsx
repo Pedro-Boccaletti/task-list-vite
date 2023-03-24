@@ -87,14 +87,16 @@ function ListItem({ id }: Props) {
     error,
     data: task,
   } = useQuery({
-    queryKey: ['tasks', id],
+    queryKey: `task.${id}`,
     queryFn: reqTask,
+    refetchOnWindowFocus: false,
   })
 
   const { mutate } = useMutation({
     mutationFn: changeComplete,
     onSuccess: (updatedTask) => {
-      queryClient.setQueryData(['tasks', id], updatedTask)
+      queryClient.setQueryData(`task.${id}`, updatedTask)
+      queryClient.invalidateQueries('tasksIds')
     }
   })
 

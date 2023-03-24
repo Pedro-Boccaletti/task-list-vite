@@ -3,8 +3,6 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { useAppSelector } from '../../redux/hooks';
-import { TaskRes } from '../../typings/Api';
-import { Task } from '../../typings/Task';
 import { axiosReq } from '../../utils/axiosReq';
 import AddField from './AddField';
 import ListItem from './ListItem';
@@ -31,6 +29,7 @@ function List() {
   } = useQuery({
     queryKey: 'tasksIds',
     queryFn: reqIds,
+    refetchInterval: 20 * 1000,
   })
 
   if (status === 'error') {
