@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 type Props = {}
 
-const FormInput = styled(Input<string>)`
+const FormInput = styled(Input)`
   ${tw`border-cyan-300 m-5`}
   width: 20rem;
 `
@@ -25,26 +25,26 @@ const SForm = styled.form`
 `
 
 function LoginForm({}: Props) {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
 
   return (
     <SForm
       onSubmit={async (e) => {
-        e.preventDefault();
-        if (!emailRef.current || !passwordRef.current) return;
+        e.preventDefault()
+        if (!emailRef.current || !passwordRef.current) return
         try {
           const {data} = await axiosReq().post('/login', {
              email: emailRef.current.value,
              password: passwordRef.current.value,
           })
-          dispatch(setUser(data as User));
-          navigate('/tasks');
+          dispatch(setUser(data as User))
+          navigate('/app/tasks')
           
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
         
       }}
