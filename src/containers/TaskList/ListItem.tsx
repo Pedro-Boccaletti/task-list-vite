@@ -25,7 +25,7 @@ const STitle = styled.h5`
 `
 
 const SDescription = styled.p`
- ${tw`
+  ${tw`
     ml-2
     text-xs
     md:text-base
@@ -35,11 +35,15 @@ const SDescription = styled.p`
     duration-500
     ease-in-out
     hover:text-gray-700
- `}
+    max-w-xs
+    md:max-w-xl
+  `}
 `
 
 const SCheckBox = styled(CheckBox)`
   ${tw`mt-3 h-4 w-4`}
+  min-width: 1rem;
+  min-height: 1rem;
 
   :checked {
     ${tw`bg-blue-600`}

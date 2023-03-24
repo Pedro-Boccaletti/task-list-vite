@@ -8,7 +8,7 @@ import { axiosReq } from '../../utils/axiosReq'
 import DateTimePicker from 'react-datetime-picker'
 
 const SAddField = styled.fieldset`
-  ${tw`flex p-2 gap-2`}
+  ${tw`flex p-2 gap-2 flex-col md:flex-row`}
 `
 
 const AddInput = styled(Input)`
@@ -16,8 +16,7 @@ const AddInput = styled(Input)`
 `
 
 const SDateTimePicker = styled(DateTimePicker)`
-  ${tw`border-2 rounded-2xl p-4`}
-  width: auto;
+  ${tw`border-2 rounded-2xl p-4 w-12 md:w-auto`}
 
   .react-datetime-picker__wrapper {
     border: none;
