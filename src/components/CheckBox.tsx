@@ -11,7 +11,7 @@ type CheckProps = {
 }
 
 
-const SLabel = styled.label`
+const SLabel = styled.label` // this styles needs testing
   ${tw`flex border-2 rounded-full justify-center items-center p-1 w-fit`}
 `;
 
@@ -35,17 +35,27 @@ const SCheckBox = styled.input`
   }
 
   &:checked {
-    ${tw`bg-blue-700 border-0`}
+    ${tw`bg-black border-0`}
+    :hover {
+      ${tw`bg-gray-900`}
+    }
   }
 `
 
 function CheckBox({ name, className, forwardRef, onChange, checked }:CheckProps) {
   if (!name) return (
-    <SCheckBox type='checkbox' ref={forwardRef} onChange={onChange} checked={checked} />
+    <SCheckBox
+      type='checkbox'
+      ref={forwardRef}
+      onChange={onChange}
+      checked={checked}
+      className={className}
+    />
   )
   return (
-    <SLabel className={className}>
+    <SLabel>
       <SCheckBox
+        className={className}
         type='checkbox'
         ref={forwardRef}
         onChange={onChange}

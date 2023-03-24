@@ -7,7 +7,8 @@ import { axiosReq } from '../../utils/axiosReq';
 import When from './When';
 
 const SItem = styled.div`
-  ${tw`flex justify-center items-center space-x-3 px-10`}
+  ${tw`flex space-x-3 px-10 bg-gray-100 bg-gradient-to-b m-2 rounded-2xl py-3`}
+  min-width: 30%
 `
 
 const STitle = styled.h5`
@@ -37,6 +38,18 @@ const SDescription = styled.p`
  `}
 `
 
+const SCheckBox = styled(CheckBox)`
+  ${tw`mt-3 h-4 w-4`}
+
+  :checked {
+    ${tw`bg-blue-600`}
+
+    :hover {
+      ${tw`bg-blue-800`}
+    }
+  }
+`
+
 type Props = {
   task: Task;
 }
@@ -51,7 +64,7 @@ function ListItem({ task }: Props) {
 
   return (
     <SItem>
-      <CheckBox forwardRef={checkRef} onChange={(e) => {
+      <SCheckBox forwardRef={checkRef} onChange={(e) => {
         axiosReq().patch(`task/${task.id}`, {
           complete: e.target.checked,
         })
