@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 type Props = {
-  date?: Date;
+  date: Date;
 }
 
 const DateContainer = styled.div`
@@ -31,7 +31,6 @@ const getWeekDay = (date: Date): string => {
 }
 
 function When({ date }: Props) {
-  if (!date) return null
   const day = date.toLocaleDateString(undefined, { day: '2-digit' })
   const month = getMonthString(date)
   const year = date.getFullYear()
