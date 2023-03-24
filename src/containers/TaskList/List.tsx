@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { useAppSelector } from '../../redux/hooks';
@@ -16,31 +17,34 @@ type Props = {
 }
 
 function List() {
-  const [items, setItems] = useState<Task[]>([]);
   const { id } = useAppSelector(state => state.userSlice.user);
 
-  useEffect(() => {
-    const req = async () => {
-      const res: { data: TaskRes[] } = await axiosReq().get(`/task/user/${id}`);
-      
-      const tmp: Task[] = res.data.map(e => {
-        return {
-          id: e.id,
-          title: e.title,
-          description: e.description,
-          date: e.time ? new Date(e.time) : undefined,
-          complete: e.complete,
-        };
-      })
-      setItems(tmp);
-    };
-    if (id) req();
-  }, [id]);
+  const reqIds = async () => {
+    const res: { data: string[] } = await axiosReq().get(`/task/user/${id}/taskIds`);
+    return res.data;
+  };
+
+  const {
+    status,
+    error,
+    data: tasksIds,
+  } = useQuery({
+    queryKey: 'tasksIds',
+    queryFn: reqIds,
+  })
+
+  if (status === 'error') {
+    console.log(`Error in List Fetch: ${JSON.stringify(error)}`);
+    
+    return null
+  }
+
+  if (status === 'loading') return (<div>loading</div>)
 
   return (
     <>
       <SList role='list'>
-        {items.map((e, i) => <ListItem key={i} task={e} />)}
+        {status === 'success' && tasksIds.map((e, i) => <ListItem key={i} id={e} />)}
       </SList>
       <AddField />
     </>

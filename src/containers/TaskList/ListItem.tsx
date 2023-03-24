@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import CheckBox from '../../components/CheckBox';
+import { TaskRes } from '../../typings/Api';
 import { Task } from '../../typings/Task'
 import { axiosReq } from '../../utils/axiosReq';
 import When from './When';
@@ -55,28 +57,73 @@ const SCheckBox = styled(CheckBox)`
 `
 
 type Props = {
-  task: Task;
+  id: string;
 }
 
-function ListItem({ task }: Props) {
+function ListItem({ id }: Props) {
   const checkRef = useRef<HTMLInputElement>(null)
+  const queryClient = useQueryClient()
+
+  const reqTask = async (): Promise<Task> => {
+    const res: { data: TaskRes } = await axiosReq().get(`/task/${id}`)    
+    return {
+      ...res.data,
+      date: res.data.time ? new Date(res.data.time) : undefined,
+    }
+  }
+
+  const changeComplete = async (complete: boolean): Promise<Task> => {
+    const res: {data: TaskRes} = await axiosReq().patch(`task/${id}`, {
+      complete,
+    })
+    return {
+      ...res.data,
+      date: res.data.time ? new Date(res.data.time) : undefined,
+    }
+  }
+
+  const {
+    status,
+    error,
+    data: task,
+  } = useQuery({
+    queryKey: ['tasks', id],
+    queryFn: reqTask,
+  })
+
+  const { mutate } = useMutation({
+    mutationFn: changeComplete,
+    onSuccess: (updatedTask) => {
+      queryClient.setQueryData(['tasks', id], updatedTask)
+    }
+  })
+
 
   useEffect(() => {
-    if (checkRef.current)
+    if (checkRef.current && task)
       checkRef.current.checked = task.complete
-  }, [checkRef.current])
+  }, [checkRef.current, task])
 
+
+  if (status === 'error') {
+    console.log(`Error in List Fetch: ${JSON.stringify(error)}`);
+    
+    return null
+  }
+
+  if (status === 'loading') return (<div>loading</div>)
+
+  if (status === 'idle') return null
+  
   return (
     <SItem>
       <SCheckBox forwardRef={checkRef} onChange={(e) => {
-        axiosReq().patch(`task/${task.id}`, {
-          complete: e.target.checked,
-        })
+        mutate(e.target.checked)
       }} />
       <div>
         <STitle>{task.title}</STitle>
         {task.description && <SDescription>{task.description}</SDescription> }
-        <When date={task.date}/>
+        {task.date && <When date={task.date}/>}
       </div>
       
     </SItem>
