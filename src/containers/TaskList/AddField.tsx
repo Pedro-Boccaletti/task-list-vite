@@ -6,6 +6,7 @@ import Input from '../../components/Input'
 import { useAppSelector } from '../../redux/hooks'
 import { axiosReq } from '../../utils/axiosReq'
 import DateTimePicker from 'react-datetime-picker'
+import { useMutation, useQueryClient } from 'react-query'
 
 const SAddField = styled.fieldset`
   ${tw`flex p-2 gap-2 flex-col md:flex-row`}
@@ -31,7 +32,32 @@ function AddField({}: Props) {
   const [disabled, setDisabled] = useState<boolean>(true)
   const [date, setDate] = useState<Date>()
   const user = useAppSelector(s => s.userSlice.user)
+  const queryClient = useQueryClient()
 
+  const addTask = async () => {
+    if (!(titleRef.current && descriptionRef.current)) return;
+    try {
+      const {status} = await axiosReq().post('/task', {
+        title: titleRef.current.value,
+        description: descriptionRef.current.value,
+        time: date,
+        userId: user.id,
+      })
+      
+      titleRef.current.value = ''
+      descriptionRef.current.value = ''
+      setDisabled(true)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const { mutate } = useMutation({
+    mutationFn: addTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries('tasksIds')
+    }
+  })
 
   return (
     <SAddField>
@@ -55,23 +81,7 @@ function AddField({}: Props) {
         name='Adicionar'
         type='button'
         disabled={disabled}
-        click={async () => {
-          if (!(titleRef.current && descriptionRef.current)) return;
-          try {
-            const {status} = await axiosReq().post('/task', {
-              title: titleRef.current.value,
-              description: descriptionRef.current.value,
-              time: date,
-              userId: user.id,
-            })
-            
-            titleRef.current.value = ''
-            descriptionRef.current.value = ''
-            setDisabled(true)
-          } catch (error) {
-            console.log(error);
-          }
-        }}
+        click={() => { mutate() }}
       />
     </SAddField>
   )
