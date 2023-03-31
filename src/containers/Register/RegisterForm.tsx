@@ -24,10 +24,12 @@ const SForm = styled.form`
   ${tw`flex flex-col justify-center items-center`}
 `
 
-function LoginForm({}: Props) {
+function RegisterForm({}: Props) {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const emailRef = useRef<HTMLInputElement>(null)
+  const usernameRef = useRef<HTMLInputElement>(null)
+  const fNameRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
 
   return (
@@ -36,9 +38,11 @@ function LoginForm({}: Props) {
         e.preventDefault()
         if (!emailRef.current || !passwordRef.current) return
         try {
-          const {data} = await axiosReq().post('/login', {
-             email: emailRef.current.value,
-             password: passwordRef.current.value,
+          const {data} = await axiosReq().post('/user', {
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            username: usernameRef.current?.value,
+            firstName: fNameRef.current?.value,
           })
           dispatch(setUser(data as User))
           navigate('/app/tasks')
@@ -55,18 +59,23 @@ function LoginForm({}: Props) {
         forwardRef={emailRef}
       />
       <FormInput
+        name='Username'
+        type='text'
+        forwardRef={usernameRef}
+      />
+      <FormInput
+        name='First Name'
+        type='text'
+        forwardRef={fNameRef}
+      />
+      <FormInput
         name='Senha'
         type='password'
         forwardRef={passwordRef}
       />
-      <FormButton name='Login'/>
-      <FormButton
-        name='Registrar'
-        type='button'
-        click={() => {navigate('/register')}}
-      />
+      <FormButton name='Criar'/>
     </SForm>
   )
 }
 
-export default LoginForm
+export default RegisterForm
