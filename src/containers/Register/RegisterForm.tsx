@@ -41,7 +41,7 @@ function RegisterForm({}: Props) {
           const {data} = await axiosReq().post('/user', {
             email: emailRef.current.value,
             password: passwordRef.current.value,
-            username: usernameRef.current?.value,
+            userName: usernameRef.current?.value,
             firstName: fNameRef.current?.value,
           })
           dispatch(setUser(data as User))
