@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = `${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}`
+const baseURL = `${import.meta.env.VITE_API_URL}`
 
 export const axiosReq = (authorization?: string) => axios.create({
   baseURL,
